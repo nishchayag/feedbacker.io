@@ -1,36 +1,46 @@
 import connectDB from "@/lib/connectDB";
 import { NextResponse, NextRequest } from "next/server";
 import { getServerSession } from "next-auth";
-import mongoose from "mongoose";
 import authOptions from "@/lib/nextAuthOptions";
 import UserModel from "@/models/user.model";
+import "@/models/message.model";
+import messageModel from "@/models/message.model";
 export async function GET(request: NextRequest) {
   await connectDB();
+
   try {
     const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-      return NextResponse.json({ error: "User not logged in, please login" });
+
+    if (!session || !session.user || !session.user._id) {
+      return NextResponse.json({
+        success: false,
+        error: "User not logged in, please login",
+      });
     }
 
-    const userId = new mongoose.Types.ObjectId(session.user._id as string);
+    const user = await UserModel.findById(session.user._id)
+      .populate({
+        path: "messages",
+        options: { sort: { createdAt: -1 } },
+      })
+      .select("messages");
 
-    const userInDB = await UserModel.aggregate([
-      { $match: { _id: userId } },
-      { $unwind: "$messages" },
-      { $sort: { "messages.createdAt": -1 } },
-      { $group: { _id: "$_id", messages: { $push: "$messages" } } },
-    ]);
-
-    if (!userInDB || userInDB.length === 0) {
-      return NextResponse.json({ error: "No messages found for this user" });
+    if (!user || !user.messages) {
+      return NextResponse.json({
+        success: false,
+        error: "No messages found for this user",
+      });
     }
 
     return NextResponse.json({
-      messages: userInDB[0].messages,
       success: true,
+      messages: user.messages,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in getMessages route:", error);
-    return NextResponse.json({ error: "Error fetching messages: " + error });
+    return NextResponse.json({
+      success: false,
+      error: "Error fetching messages: " + error.message,
+    });
   }
 }

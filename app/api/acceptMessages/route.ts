@@ -12,14 +12,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User not logged in, please login" });
     }
 
-    const { acceptMessages } = await request.json();
-    if (!acceptMessages) {
-      return NextResponse.json({ error: "Message content is required" });
+    const { isAcceptingMessages } = await request.json();
+    if (typeof isAcceptingMessages !== "boolean") {
+      return NextResponse.json({ error: "Invalid acceptance request" });
     }
 
     const updatedUser = await UserModel.findOneAndUpdate(
       { _id: session.user._id },
-      { isAcceptingMessages: acceptMessages },
+      { isAcceptingMessages: isAcceptingMessages },
       { new: true }
     );
     if (!updatedUser) {

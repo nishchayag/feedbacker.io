@@ -5,11 +5,13 @@ import connectDB from "@/lib/connectDB";
 export async function POST(request: NextRequest) {
   await connectDB();
   try {
-    const { username, content } = await request.json();
-    if (!username || !content) {
+    const { username, email, content } = await request.json();
+    if ((!username && !email) || !content) {
       return NextResponse.json({ error: "Username and content are required" });
     }
-    const user = await UserModel.findOne({ username });
+    const user = await UserModel.findOne({
+      $or: [{ username }, { email }],
+    });
     if (!user) {
       return NextResponse.json({ error: "User not found" });
     }
@@ -24,7 +26,7 @@ export async function POST(request: NextRequest) {
       createdFor: user._id,
     });
 
-    user.messages.push(newMessage);
+    user.messages.push(newMessage._id);
     await user.save();
     return NextResponse.json({
       message: "Message sent successfully",
