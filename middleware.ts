@@ -9,10 +9,10 @@ const authPages = [
   "/forgotPassword",
   "/resetPassword",
   "/verifyEmail",
-  "/u/[username]",
 ];
 const isAuthPage = (path: string) => {
-  return authPages.includes(path);
+  const isFeedbackPage = path.startsWith("/u/");
+  return authPages.includes(path) || isFeedbackPage;
 };
 
 export async function middleware(request: NextRequest) {
@@ -32,7 +32,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next|favicon.ico|api/|login|signup|forgotPassword|resetPassword|verifyEmail|u/[username]).*)",
-  ],
+  matcher: ["/((?!_next|favicon.ico|api/).*)"],
 };
