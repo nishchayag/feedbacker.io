@@ -17,7 +17,7 @@ import {
 import { IMessage } from "@/models/message.model";
 import { toast } from "sonner";
 import axios from "axios";
-import { formatDistanceToNow, format } from "date-fns";
+import { formatDistanceToNow } from "date-fns";
 
 type MessageCardProps = {
   message: IMessage;
@@ -39,7 +39,29 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
       setLoading(false);
     }
   };
+  const createdAt = new Date(message.createdAt);
 
+  // Format time
+  const time = new Intl.DateTimeFormat(undefined, {
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true,
+  }).format(createdAt);
+
+  // Format date
+  const date = new Intl.DateTimeFormat(undefined, {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  }).format(createdAt);
+
+  // Extract timezone abbreviation (e.g. IST)
+  const timezone =
+    new Intl.DateTimeFormat(undefined, {
+      timeZoneName: "shortGeneric",
+    })
+      .formatToParts(createdAt)
+      .find((part) => part.type === "timeZoneName")?.value ?? "";
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between items-start">
@@ -78,17 +100,9 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
 
       <CardContent>
         <p className="text-sm text-muted-foreground whitespace-pre-line">
-          {`${new Intl.DateTimeFormat(undefined, {
-            hour: "numeric",
-            minute: "numeric",
-            hour12: true,
-            day: "2-digit",
-            month: "2-digit",
-            year: "2-digit",
-            timeZoneName: "long",
-          }).format(
-            new Date(message.createdAt)
-          )}\n${formatDistanceToNow(new Date(message.createdAt), { addSuffix: true })}`}
+          {`${time}, ${date} (${timezone})\n${formatDistanceToNow(createdAt, {
+            addSuffix: true,
+          })}`}
         </p>
       </CardContent>
     </Card>

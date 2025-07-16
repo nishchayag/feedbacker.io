@@ -4,6 +4,7 @@ import "./globals.css";
 import SessionWrapper from "@/components/SessionWrapper";
 import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -32,6 +33,8 @@ export default function RootLayout({
         >
           <Navbar />
           {children}
+          <Footer />
+          {/* Sonner Toast Notifications */}
           <Toaster position="top-right" expand={true} richColors />
         </body>
       </SessionWrapper>

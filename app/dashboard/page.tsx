@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 type AcceptMessagesFormData = {
   isAcceptingMessages: boolean;
 };
@@ -116,7 +117,7 @@ const Page = () => {
           <input
             readOnly
             placeholder="url"
-            value={`https://${domainUrl}/${session?.user?.username || session?.user?.email || "your-link"}`}
+            value={`https://${domainUrl}/u/${session?.user?.username || session?.user?.email || "your-link"}`}
             className="flex-1 px-3 py-2 border rounded-md text-sm bg-background focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <Button
@@ -124,15 +125,17 @@ const Page = () => {
             variant="outline"
             onClick={() => {
               navigator.clipboard.writeText(
-                `https://${domainUrl}/${session?.user?.username || "your-link"}`
+                `https://${domainUrl}/u/${session?.user?.username || session?.user?.email || "your-link"}`
               );
               toast.success("Link copied to clipboard");
             }}
+            className="cursor-pointer"
           >
             Copy
           </Button>
         </div>
       </div>
+      {/* <Separator /> */}
       {/* Accepting Messages Toggle and Refresh Button */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h1 className="text-2xl font-bold text-indigo-600">Your Feedback</h1>
