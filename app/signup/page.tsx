@@ -60,10 +60,10 @@ const Page = () => {
           setIsAvailable(response.data.success);
           setUsernameAvailableMessage(response.data.message);
           setLastCheckedUsername(debouncedUsername);
-        } catch (error: any) {
+        } catch (error: unknown) {
           console.error("Error checking username uniqueness:", error);
           toast.error("Error checking username uniqueness", {
-            description: error.message,
+            description: (error as Error).message,
           });
         } finally {
           setIsCheckingUsername(false);

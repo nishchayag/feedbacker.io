@@ -16,7 +16,6 @@ const Page = () => {
   const [username, setUsername] = useState("");
   const [refreshVar, setRefreshVar] = useState(1);
   const params = useParams();
-  const [generatingSuggestions, setGeneratingSuggestions] = useState(false);
 
   const { register, handleSubmit, setValue, reset } = useForm<FormData>({
     defaultValues: {
@@ -137,7 +136,7 @@ const Page = () => {
               className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-800 transition"
             >
               <RefreshCw
-                className={`h-4 w-4 ${generatingSuggestions ? "animate-spin" : ""}`}
+                className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
               />
               Refresh
             </button>

@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-
+import Image from "next/image";
 const testimonials = [
   {
     name: "Jane Doe",
@@ -24,7 +24,6 @@ const testimonials = [
 ];
 
 export default function TestimonialsCarousel() {
-  const sliderRef = useRef(null);
   const [sliderInstanceRef, slider] = useKeenSlider<HTMLDivElement>({
     loop: true,
     slides: {
@@ -51,7 +50,7 @@ export default function TestimonialsCarousel() {
         {testimonials.map((t, i) => (
           <div key={i} className="keen-slider__slide">
             <div className="bg-white p-6 rounded-lg shadow-md border mx-4">
-              <img
+              <Image
                 src={t.avatar}
                 alt={t.name}
                 className="mx-auto rounded-full w-16 h-16 mb-4"

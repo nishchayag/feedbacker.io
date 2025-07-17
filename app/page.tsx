@@ -145,7 +145,9 @@ export default function Home() {
       {/* CTA Final Section */}
       <section className="py-20 px-6 bg-indigo-600 text-white text-center">
         <h2 className="text-3xl font-bold mb-4">Ready to collect feedback?</h2>
-        <p className="text-lg mb-6">Get started in 30 seconds. It's free.</p>
+        <p className="text-lg mb-6">
+          Get started in 30 seconds. It&apos;s free.
+        </p>
         <Link
           href="/signup"
           className="bg-white text-indigo-600 px-6 py-3 rounded-md font-medium hover:bg-gray-100 transition"

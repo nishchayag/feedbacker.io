@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect } from "react";
 import { IMessage } from "@/models/message.model";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
@@ -27,10 +27,9 @@ const Page = () => {
 
   const { data: session } = useSession();
 
-  const { register, handleSubmit, watch, setValue } =
-    useForm<AcceptMessagesFormData>({
-      resolver: zodResolver(isAcceptingMessagesSchema),
-    });
+  const { watch, setValue } = useForm<AcceptMessagesFormData>({
+    resolver: zodResolver(isAcceptingMessagesSchema),
+  });
 
   const isAcceptMessages = watch("isAcceptingMessages");
 
@@ -41,10 +40,10 @@ const Page = () => {
       if (response.data.success) {
         setValue("isAcceptingMessages", response.data.isAcceptingMessages);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error fetching accept messages:", error);
       toast.error(
-        "Failed to fetch message acceptance status: " + error.message
+        "Failed to fetch message acceptance status: " + (error as Error).message
       );
     } finally {
       setIsSwitchLoading(false);
@@ -63,9 +62,9 @@ const Page = () => {
         if (refresh) {
           toast("Showing latest messages");
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error("Error fetching messages:", error);
-        toast.error("Failed to fetch messages: " + error.message);
+        toast.error("Failed to fetch messages: " + (error as Error).message);
       } finally {
         setIsSwitchLoading(false);
         setLoading(false);
@@ -92,10 +91,11 @@ const Page = () => {
         setValue("isAcceptingMessages", checked);
         toast.success("Message acceptance status updated successfully");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error updating message acceptance status:", error);
       toast.error(
-        "Failed to update message acceptance status: " + error.message
+        "Failed to update message acceptance status: " +
+          (error as Error).message
       );
     } finally {
       setIsSwitchLoading(false);
@@ -177,7 +177,7 @@ const Page = () => {
         </div>
       ) : messages.length === 0 ? (
         <div className="text-center text-gray-500 mt-20 text-lg">
-          You haven't received any messages yet.
+          You haven&apos;t received any messages yet.
         </div>
       ) : (
         <div className="space-y-6">

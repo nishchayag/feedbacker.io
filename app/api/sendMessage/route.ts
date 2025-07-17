@@ -32,10 +32,10 @@ export async function POST(request: NextRequest) {
       message: "Message sent successfully",
       success: true,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in sendMessage route:", error);
     return NextResponse.json({
-      error: "Error sending message: " + error.message,
+      error: "Error sending message: " + (error as Error).message,
       success: false,
     });
   }

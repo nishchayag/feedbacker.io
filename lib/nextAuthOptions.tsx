@@ -49,9 +49,9 @@ const authOptions: AuthOptions = {
             }
             return userInDB;
           }
-        } catch (error: any) {
+        } catch (error: unknown) {
           console.error("Error during authorization:", error);
-          throw new Error(error);
+          throw new Error((error as Error).message);
         }
       },
     }),

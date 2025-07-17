@@ -14,14 +14,7 @@ export default function VerifyEmailPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, setValue, getValues, watch } = useForm({
     defaultValues: {
       otp1: "",
       otp2: "",
@@ -78,9 +71,9 @@ export default function VerifyEmailPage() {
 
         router.push("/login");
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error verifying email:", error);
-      toast("Error verifying email: " + error.message);
+      toast("Error verifying email: " + (error as Error).message);
     } finally {
       setLoading(false);
     }

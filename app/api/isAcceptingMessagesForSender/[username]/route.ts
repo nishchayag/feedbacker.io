@@ -27,11 +27,11 @@ export async function GET(
       isAcceptingMessages: user.isAcceptingMessages,
       success: true,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error fetching user acceptance status:", error);
     return NextResponse.json(
       {
-        error: "Error fetching acceptance status: " + error.message,
+        error: "Error fetching acceptance status: " + (error as Error).message,
       },
       { status: 500 }
     );

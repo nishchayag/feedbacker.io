@@ -17,7 +17,10 @@ export const sendEmail = async ({
 }) => {
   try {
     await connectDB();
-    (!email || !mailType) && console.error("Email or mailType is missing");
+    if (!email || !mailType) {
+      console.error("Email or mailType is missing");
+      return;
+    }
     const userInDB = await userModel.findOne({ email });
     if (!userInDB) {
       console.error("User not found in the database");

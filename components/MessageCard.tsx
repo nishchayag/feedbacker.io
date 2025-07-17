@@ -33,8 +33,9 @@ const MessageCard = ({ message, onMessageDelete }: MessageCardProps) => {
       const response = await axios.delete(`/api/deleteMessage/${message._id}`);
       toast.success(response.data.message || "Message deleted");
       onMessageDelete(message._id as string);
-    } catch (error) {
-      toast.error("Failed to delete message");
+    } catch (error: unknown) {
+      console.log("Error deleting message:", error);
+      toast.error("Failed to delete message:");
     } finally {
       setLoading(false);
     }

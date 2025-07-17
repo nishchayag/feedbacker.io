@@ -4,8 +4,7 @@ import { getServerSession } from "next-auth";
 import authOptions from "@/lib/nextAuthOptions";
 import UserModel from "@/models/user.model";
 import "@/models/message.model";
-import messageModel from "@/models/message.model";
-export async function GET(request: NextRequest) {
+export async function GET() {
   await connectDB();
 
   try {
@@ -36,11 +35,11 @@ export async function GET(request: NextRequest) {
       success: true,
       messages: user.messages,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in getMessages route:", error);
     return NextResponse.json({
       success: false,
-      error: "Error fetching messages: " + error.message,
+      error: "Error fetching messages: " + (error as Error).message,
     });
   }
 }

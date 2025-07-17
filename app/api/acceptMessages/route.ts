@@ -3,6 +3,7 @@ import connectDB from "@/lib/connectDB";
 import { NextResponse, NextRequest } from "next/server";
 import authOptions from "@/lib/nextAuthOptions";
 import UserModel from "@/models/user.model";
+import { ApiError } from "next/dist/server/api-utils";
 
 export async function POST(request: NextRequest) {
   await connectDB();
@@ -31,15 +32,15 @@ export async function POST(request: NextRequest) {
       updatedUser,
       success: true,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in acceptMessage route:", error);
     return NextResponse.json({
-      error: "Error accepting message: " + error.message,
+      error: "Error accepting message: " + (error as Error).message,
     });
   }
 }
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   await connectDB();
   try {
     const session = await getServerSession(authOptions);
@@ -58,10 +59,11 @@ export async function GET(request: NextRequest) {
       isAcceptingMessages: user.isAcceptingMessages,
       success: true,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error in acceptMessage GET route:", error);
     return NextResponse.json({
-      error: "Error fetching message acceptance status: " + error.message,
+      error:
+        "Error fetching message acceptance status: " + (error as Error).message,
     });
   }
 }
