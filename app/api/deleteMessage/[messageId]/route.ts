@@ -1,11 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import connectDB from "@/lib/connectDB";
 import { getServerSession, User } from "next-auth";
 import authOptions from "@/lib/nextAuthOptions";
 import UserModel from "@/models/user.model";
 import messageModel from "@/models/message.model";
 
-export async function DELETE({ params }: { params: { messageId: string } }) {
+export async function DELETE(
+  _req: NextRequest,
+  { params }: { params: { messageId: string } }
+) {
   await connectDB();
   const messageId = await params.messageId;
   const session = await getServerSession(authOptions);
