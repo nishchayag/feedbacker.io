@@ -1,11 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import connectDB from "@/lib/connectDB";
 import UserModel from "@/models/user.model";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { username: string } }
-) {
+export async function GET({ params }: { params: { username: string } }) {
   await connectDB();
 
   try {
