@@ -53,6 +53,8 @@ export default function TestimonialsCarousel() {
               <Image
                 src={t.avatar}
                 alt={t.name}
+                width={64}
+                height={64}
                 className="mx-auto rounded-full w-16 h-16 mb-4"
               />
               <p className="text-gray-600 italic">“{t.feedback}”</p>

@@ -28,7 +28,7 @@ export const sendEmail = async ({
     }
 
     const { data, error } = await resend.emails.send({
-      from: "FeedBacker.io <feedback@feedbacker-io.nishchayag.live>",
+      from: "FeedBacker.io <feedback-io@nishchayag.live>",
       to: email,
       subject:
         mailType === "VERIFY"
