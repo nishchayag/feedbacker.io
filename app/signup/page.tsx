@@ -23,11 +23,7 @@ const Page = () => {
   const [isAvailable, setIsAvailable] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<z.infer<typeof signupSchema>>({
+  const { register, handleSubmit } = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       username: "",
