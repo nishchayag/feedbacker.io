@@ -23,7 +23,7 @@ const faqs = [
     icon: <HelpCircle className="text-indigo-500 w-5 h-5 mr-2 shrink-0" />,
     question: "Is there a limit to how many messages I can receive?",
     answer:
-      "No, there’s no cap. You can receive unlimited feedback as long as you keep your account active.",
+      "No, there's no cap. You can receive unlimited feedback as long as you keep your account active.",
   },
   {
     icon: <Trash2 className="text-indigo-500 w-5 h-5 mr-2 shrink-0" />,

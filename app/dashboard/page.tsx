@@ -13,7 +13,6 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { RefreshCw } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 type AcceptMessagesFormData = {
   isAcceptingMessages: boolean;
 };

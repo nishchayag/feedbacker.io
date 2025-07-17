@@ -12,12 +12,12 @@ const Navbar = () => {
     <nav className="sticky top-0 z-50 w-full bg-white shadow-md border-b border-gray-200 px-6 py-4">
       <div className="flex justify-between items-center">
         {/* Logo */}
-        <a
+        <Link
           href="/"
           className="text-2xl font-bold text-indigo-600 tracking-tight hover:tracking-wider transition-all duration-300"
         >
           FeedBacker.io
-        </a>
+        </Link>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-5">

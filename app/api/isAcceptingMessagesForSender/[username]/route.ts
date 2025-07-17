@@ -1,18 +1,23 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/connectDB";
 import UserModel from "@/models/user.model";
-export async function GET({
-  params,
-}: {
-  params: { username: string; email: string };
-}) {
-  await connectDB();
-  try {
-    const { username, email } = params;
 
-    const user = await UserModel.findOne({
-      $or: [{ username }, { email }],
-    }).select("isAcceptingMessages");
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { username: string } }
+) {
+  await connectDB();
+
+  try {
+    const { username } = await params;
+
+    if (!username) {
+      return NextResponse.json(
+        { error: "Username is required" },
+        { status: 400 }
+      );
+    }
+    const user = await UserModel.findOne({ username });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });

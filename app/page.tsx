@@ -108,22 +108,36 @@ export default function Home() {
       </section>
 
       {/* Live Preview */}
-      <section className="py-16 px-6 bg-gray-100 text-center">
-        <h2 className="text-3xl font-semibold mb-4">
-          Want to see it in action?
-        </h2>
-        <p className="text-gray-600 mb-6">
-          Here's a sample link where you can send a test feedback and experience
-          it yourself.
-        </p>
-        <Link
-          href="/nishchay"
-          target="_blank"
-          className="inline-block bg-indigo-600 text-white px-6 py-3 rounded-md hover:bg-indigo-700 transition"
-        >
-          Try Live Demo
-        </Link>
+      <section className="bg-white py-20 px-4 text-center">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">Try It Live</h2>
+          <p className="text-gray-600 mb-8">
+            Experience how easy it is to send anonymous feedback — no login
+            required.
+          </p>
+
+          <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm">
+            <textarea
+              disabled
+              rows={3}
+              placeholder="Type your anonymous feedback here..."
+              className="w-full resize-none rounded-md border border-gray-300 px-4 py-3 bg-white text-sm text-gray-600 shadow-sm cursor-not-allowed"
+            />
+
+            <button
+              disabled
+              className="mt-4 w-full bg-indigo-400 text-white text-sm font-medium py-2.5 px-5 rounded-md opacity-60 cursor-not-allowed"
+            >
+              Submit Feedback
+            </button>
+          </div>
+
+          <p className="text-xs text-gray-400 mt-4">
+            Live demo submissions will be available soon.
+          </p>
+        </div>
       </section>
+
       {/* Testimonials */}
       <TestimonialsCarousel />
       {/* FAQ Section */}

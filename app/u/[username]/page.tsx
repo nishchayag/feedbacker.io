@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { RefreshCw } from "lucide-react";
-import { useCompletion } from "@ai-sdk/react";
+
 type FormData = {
   message: string;
 };
@@ -13,16 +13,19 @@ type FormData = {
 const Page = () => {
   const [loading, setLoading] = useState(false);
   const [suggestedMessages, setSuggestedMessages] = useState<string[]>([]);
-  const [messageValue, setMessageValue] = useState("");
-  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [refreshVar, setRefreshVar] = useState(1);
   const params = useParams();
   const [generatingSuggestions, setGeneratingSuggestions] = useState(false);
 
+  const { register, handleSubmit, setValue, reset } = useForm<FormData>({
+    defaultValues: {
+      message: "",
+    },
+  });
+
   useEffect(() => {
     setUsername(params.username as string);
-    setEmail(params.email as string);
   }, [params]);
 
   const handleRefresh = () => {
@@ -33,31 +36,28 @@ const Page = () => {
     setLoading(true);
     try {
       const acceptingResponse = await axios.get(
-        `/api/isAcceptingMessagesForSender`,
-        {
-          params: {
-            username: username,
-            email: email,
-          },
-        }
+        `/api/isAcceptingMessagesForSender/${username}`
       );
 
       if (!acceptingResponse.data.isAcceptingMessages) {
-        alert("User is not accepting messages.");
+        toast.error("User is not accepting messages.");
         setLoading(false);
         return;
       }
+
       const response = await axios.post("/api/sendMessage", {
-        email,
         username,
         content: data.message,
       });
+
       if (!response.data.success) {
         toast.error(response.data.error || "Failed to send message");
         setLoading(false);
         return;
       }
+
       toast.success("Message sent successfully");
+      reset(); // ✅ clears the textarea
     } catch (error) {
       console.error("Error sending message:", error);
       toast.error("Failed to send message");
@@ -66,11 +66,6 @@ const Page = () => {
     }
   };
 
-  const { register, handleSubmit } = useForm<FormData>({
-    defaultValues: {
-      message: "",
-    },
-  });
   useEffect(() => {
     const fetchSuggestions = async () => {
       try {
@@ -99,22 +94,20 @@ const Page = () => {
 
         <form
           className="space-y-6"
-          onSubmit={handleSubmit((data) => handleSubmitFunction(data))}
+          onSubmit={handleSubmit(handleSubmitFunction)}
         >
           <div className="relative">
             <label
               htmlFor="message"
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Send Feedback message to {username ? `@${username}` : email}
+              Send Feedback message to @{username}
             </label>
             <textarea
               id="message"
               {...register("message")}
               placeholder="Type your feedback here..."
               rows={3}
-              value={messageValue}
-              onChange={(e) => setMessageValue(e.target.value)}
               className="w-full resize-none overflow-hidden rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm transition-all"
               onInput={(e) => {
                 e.currentTarget.style.height = "auto";
@@ -127,13 +120,15 @@ const Page = () => {
           <div className="flex items-center justify-center">
             <button
               type="submit"
+              disabled={loading}
               className="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium py-2.5 px-5 rounded-lg shadow transition"
             >
               Submit Feedback
             </button>
           </div>
         </form>
-        {/* Suggestion Box - OUTSIDE CARD */}
+
+        {/* Suggestion Box */}
         <div className="w-full max-w-2xl mt-6">
           <h2 className="text-sm font-semibold text-gray-700 mb-3 flex justify-between">
             Not sure what to write? Try one of these:{" "}
@@ -154,12 +149,11 @@ const Page = () => {
                 key={index}
                 type="button"
                 onClick={() => {
-                  setMessageValue(suggestion);
+                  setValue("message", suggestion);
                   const textarea = document.getElementById(
                     "message"
                   ) as HTMLTextAreaElement;
                   if (textarea) {
-                    textarea.value = suggestion;
                     textarea.style.height = "auto";
                     textarea.style.height = textarea.scrollHeight + "px";
                   }
