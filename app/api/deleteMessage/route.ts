@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import { User } from "next-auth";
 import connectDB from "@/lib/connectDB";
 import authOptions from "@/lib/nextAuthOptions";
@@ -6,22 +6,22 @@ import UserModel from "@/models/user.model";
 import messageModel from "@/models/message.model";
 import { getServerSession } from "next-auth";
 
-export async function POST({ params }: { params: { messageId: string } }) {
+export async function POST(request: NextRequest) {
   await connectDB();
 
-  const messageId = await params.messageId;
-  const session = await getServerSession(authOptions);
-
-  if (!session || !session.user) {
-    return NextResponse.json(
-      { message: "Unauthorized", success: false },
-      { status: 401 }
-    );
-  }
-
-  const user: User = session.user as User;
-
   try {
+    const { messageId } = await request.json();
+    const session = await getServerSession(authOptions);
+
+    if (!session || !session.user) {
+      return NextResponse.json(
+        { message: "Unauthorized", success: false },
+        { status: 401 }
+      );
+    }
+
+    const user: User = session.user as User;
+
     const updatedUser = await UserModel.findOneAndUpdate(
       { _id: user._id },
       {
