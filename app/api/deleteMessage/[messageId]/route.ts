@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 import connectDB from "@/lib/connectDB";
 import { getServerSession, User } from "next-auth";
 import authOptions from "@/lib/nextAuthOptions";
