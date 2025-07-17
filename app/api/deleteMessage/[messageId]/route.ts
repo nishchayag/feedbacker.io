@@ -1,20 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-
-import { AppRouteRouteHandlerContext } from "next/dist/server/route-modules/app-route/module";
-
+import { User } from "next-auth";
 import connectDB from "@/lib/connectDB";
 import authOptions from "@/lib/nextAuthOptions";
 import UserModel from "@/models/user.model";
 import messageModel from "@/models/message.model";
 import { getServerSession } from "next-auth";
 
-export async function DELETE(
-  _req: NextRequest,
-  context: AppRouteRouteHandlerContext
-) {
+export async function POST({ params }: { params: { messageId: string } }) {
   await connectDB();
 
-  const messageId = await context.params!.messageId;
+  const messageId = await params.messageId;
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
