@@ -13,10 +13,8 @@ const Page = () => {
   const [showPassword, setShowPassword] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
-  const handleSubmitFunction = async (data: {
-    identifier: string;
-    password: string;
-  }) => {
+
+  const handleSubmitFunction = async (data: z.infer<typeof signinSchema>) => {
     setLoading(true);
     try {
       if (!data.identifier || !data.password) {
@@ -55,7 +53,7 @@ const Page = () => {
         </h1>
 
         <form
-          onSubmit={handleSubmit((data) => handleSubmitFunction(data))}
+          onSubmit={handleSubmit(handleSubmitFunction)}
           className="space-y-5"
         >
           <div>

@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { FieldErrors, useForm } from "react-hook-form";
 import * as z from "zod";
 import { Eye, EyeOff } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -23,7 +23,11 @@ const Page = () => {
   const [isAvailable, setIsAvailable] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { register, handleSubmit } = useForm<z.infer<typeof signupSchema>>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
       username: "",
@@ -41,7 +45,15 @@ const Page = () => {
         setLastCheckedUsername("");
         return;
       }
+
       if (!debouncedUsername || debouncedUsername === lastCheckedUsername) {
+        return;
+      }
+      if (!debouncedUsername.match(/^[a-zA-Z0-9_]+$/)) {
+        setUsernameAvailableMessage(
+          "Username can only contain letters, numbers, and underscores."
+        );
+        setIsAvailable(false);
         return;
       }
       if (debouncedUsername) {
@@ -73,9 +85,34 @@ const Page = () => {
     checkUsernameUnique();
   }, [debouncedUsername, lastCheckedUsername]);
 
+  const handleFormErrors = (
+    errors: FieldErrors<z.infer<typeof signupSchema>>
+  ) => {
+    if (errors.password) {
+      toast.error(
+        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character"
+      );
+    }
+    if (errors.username) {
+      toast.error(
+        "Username can only contain letters, numbers, and underscores, should be between 4 and 20 characters long."
+      );
+    }
+  };
+
   const handleSubmitForm = async (data: z.infer<typeof signupSchema>) => {
     setLoading(true);
     try {
+      if (
+        !data.password.match(
+          /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+        )
+      ) {
+        toast.error(
+          "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+        );
+        return;
+      }
       if (data.password !== data.confirmPassword) {
         toast.error("Password and Confirm Password do not match.");
         return;
@@ -108,7 +145,7 @@ const Page = () => {
         </h1>
 
         <form
-          onSubmit={handleSubmit((data) => handleSubmitForm(data))}
+          onSubmit={handleSubmit(handleSubmitForm, handleFormErrors)}
           className="space-y-5"
         >
           <div>
