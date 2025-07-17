@@ -3,7 +3,6 @@ import connectDB from "@/lib/connectDB";
 import { NextResponse, NextRequest } from "next/server";
 import authOptions from "@/lib/nextAuthOptions";
 import UserModel from "@/models/user.model";
-import { ApiError } from "next/dist/server/api-utils";
 
 export async function POST(request: NextRequest) {
   await connectDB();

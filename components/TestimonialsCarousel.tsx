@@ -1,6 +1,6 @@
 // components/TestimonialsCarousel.tsx
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import Image from "next/image";
