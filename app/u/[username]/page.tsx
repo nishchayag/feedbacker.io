@@ -34,8 +34,9 @@ const Page = () => {
   const handleSubmitFunction = async (data: FormData) => {
     setLoading(true);
     try {
-      const acceptingResponse = await axios.get(
-        `/api/isAcceptingMessagesForSender/${username}`
+      const acceptingResponse = await axios.post(
+        `/api/isAcceptingMessagesForSender`,
+        { username }
       );
 
       if (!acceptingResponse.data.isAcceptingMessages) {
