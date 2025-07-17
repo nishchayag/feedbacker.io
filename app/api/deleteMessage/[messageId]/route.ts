@@ -1,29 +1,34 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+
+import { AppRouteRouteHandlerContext } from "next/dist/server/route-modules/app-route/module";
+
 import connectDB from "@/lib/connectDB";
-import { getServerSession, User } from "next-auth";
 import authOptions from "@/lib/nextAuthOptions";
 import UserModel from "@/models/user.model";
 import messageModel from "@/models/message.model";
+import { getServerSession } from "next-auth";
 
 export async function DELETE(
   _req: NextRequest,
-  { params }: { params: { messageId: string } }
+  context: AppRouteRouteHandlerContext
 ) {
   await connectDB();
-  const messageId = await params.messageId;
+
+  const messageId = await context.params!.messageId;
   const session = await getServerSession(authOptions);
-  if (!session || !session?.user) {
+
+  if (!session || !session.user) {
     return NextResponse.json(
       { message: "Unauthorized", success: false },
       { status: 401 }
     );
   }
-  const user: User = session?.user as User;
+
+  const user: User = session.user as User;
+
   try {
     const updatedUser = await UserModel.findOneAndUpdate(
-      {
-        _id: user._id,
-      },
+      { _id: user._id },
       {
         $pull: {
           messages: { _id: messageId },
@@ -31,20 +36,21 @@ export async function DELETE(
       },
       { new: true }
     );
-    await messageModel.findByIdAndDelete({
-      _id: messageId,
-    });
-    if (updatedUser.modifiedCount === 0) {
+
+    await messageModel.findByIdAndDelete(messageId);
+
+    if (!updatedUser) {
       return NextResponse.json(
         { message: "Message not found or already deleted", success: false },
         { status: 404 }
       );
     }
+
     return NextResponse.json(
       { message: "Message deleted successfully", success: true },
       { status: 200 }
     );
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Error deleting message:", error);
     return NextResponse.json(
       { message: "Failed to delete message", success: false },
