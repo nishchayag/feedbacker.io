@@ -2,6 +2,7 @@
 import Link from "next/link";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import FAQSection from "@/components/FAQSection";
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-white text-gray-800">
