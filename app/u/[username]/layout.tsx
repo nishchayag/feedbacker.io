@@ -4,9 +4,9 @@ import { Metadata } from "next";
 export async function generateMetadata({
   params,
 }: {
-  params: { username: string };
+  params: Promise<{ username: string }>;
 }): Promise<Metadata> {
-  const { username } = params;
+  const { username } = await params;
 
   return createMetadata({
     title: `Send Anonymous Message to ${username}`,

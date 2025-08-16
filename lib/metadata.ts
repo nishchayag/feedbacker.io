@@ -128,7 +128,7 @@ export function generateJsonLd(data: {
   author?: string;
   datePublished?: string;
   dateModified?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }) {
   const baseData = {
     "@context": "https://schema.org",

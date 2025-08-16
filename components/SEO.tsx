@@ -1,5 +1,4 @@
 import Head from "next/head";
-import { generateJsonLd } from "@/lib/metadata";
 
 interface SEOProps {
   title?: string;
