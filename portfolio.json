@@ -1,0 +1,11 @@
+{
+  "title": "Feedbacker.io",
+  "summary": "Anonymous feedback platform: create a shareable link and collect honest feedback without revealing who sent it.",
+  "stack": ["Next.js", "TypeScript", "MongoDB", "Tailwind CSS"],
+  "highlights": [
+    "Shareable public links that accept submissions without sign-up",
+    "Privacy-first design — senders stay anonymous"
+  ],
+  "demoUrl": "https://feedbackerio.nishchayag.com",
+  "kind": "Product"
+}
